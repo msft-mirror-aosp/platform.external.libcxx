@@ -8,8 +8,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-// XFAIL: android
-// XFAIL: androideabi
+// REQUIRES: locale.cs_CZ.ISO8859-2
 
 // <regex>
 

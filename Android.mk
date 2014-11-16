@@ -14,9 +14,6 @@
 # limitations under the License.
 #
 
-# Don't build for unbundled branches
-ifeq (,$(TARGET_BUILD_APPS))
-
 LOCAL_PATH := $(call my-dir)
 
 LIBCXX_SRC_FILES := \
@@ -58,13 +55,14 @@ LIBCXX_CPPFLAGS := \
 
 # target static lib
 include $(CLEAR_VARS)
-LOCAL_MODULE := libc++
+LOCAL_MODULE := libc++_static
 LOCAL_CLANG := true
 LOCAL_SRC_FILES := $(LIBCXX_SRC_FILES)
 LOCAL_C_INCLUDES := $(LIBCXX_C_INCLUDES)
 LOCAL_CPPFLAGS := $(LIBCXX_CPPFLAGS)
 LOCAL_RTTI_FLAG := -frtti
 LOCAL_WHOLE_STATIC_LIBRARIES := libc++abi libcompiler_rt
+LOCAL_CXX_STL := none
 LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk
 include $(BUILD_STATIC_LIBRARY)
 
@@ -72,9 +70,9 @@ include $(BUILD_STATIC_LIBRARY)
 include $(CLEAR_VARS)
 LOCAL_MODULE := libc++
 LOCAL_CLANG := true
-LOCAL_WHOLE_STATIC_LIBRARIES := libc++
+LOCAL_WHOLE_STATIC_LIBRARIES := libc++_static
 LOCAL_SHARED_LIBRARIES := libdl
-LOCAL_SYSTEM_SHARED_LIBRARIES := libc libm
+LOCAL_CXX_STL := none
 
 ifneq ($(TARGET_ARCH),arm)
 	LOCAL_SHARED_LIBRARIES += libdl
@@ -85,7 +83,7 @@ include $(BUILD_SHARED_LIBRARY)
 
 # host static lib
 include $(CLEAR_VARS)
-LOCAL_MODULE := libc++
+LOCAL_MODULE := libc++_static
 LOCAL_CLANG := true
 LOCAL_SRC_FILES := $(LIBCXX_SRC_FILES)
 LOCAL_C_INCLUDES := $(LIBCXX_C_INCLUDES)
@@ -93,6 +91,7 @@ LOCAL_CPPFLAGS := $(LIBCXX_CPPFLAGS)
 LOCAL_RTTI_FLAG := -frtti
 LOCAL_WHOLE_STATIC_LIBRARIES := libc++abi
 LOCAL_MULTILIB := both
+LOCAL_CXX_STL := none
 
 ifneq ($(HOST_OS), darwin)
 LOCAL_WHOLE_STATIC_LIBRARIES += libcompiler_rt
@@ -101,14 +100,18 @@ endif
 LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk
 include $(BUILD_HOST_STATIC_LIBRARY)
 
+# Don't build for unbundled branches
+ifeq (,$(TARGET_BUILD_APPS))
+
 # host dynamic lib
 include $(CLEAR_VARS)
 LOCAL_MODULE := libc++
 LOCAL_CLANG := true
 LOCAL_LDFLAGS := -nodefaultlibs
 LOCAL_LDLIBS := -lc
-LOCAL_WHOLE_STATIC_LIBRARIES := libc++
+LOCAL_WHOLE_STATIC_LIBRARIES := libc++_static
 LOCAL_MULTILIB := both
+LOCAL_CXX_STL := none
 
 ifeq ($(HOST_OS), darwin)
 LOCAL_LDFLAGS += \
