@@ -7,9 +7,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-// XFAIL: android
-// XFAIL: androideabi
-
 // <iomanip>
 
 // template <class moneyT> T7 get_money(moneyT& mon, bool intl = false);

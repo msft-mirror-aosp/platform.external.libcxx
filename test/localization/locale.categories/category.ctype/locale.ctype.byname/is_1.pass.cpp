@@ -7,10 +7,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-// Bionic's wchar_t ctype functions are only valid for the ASCII range.
-// XFAIL: android
-// XFAIL: androideabi
-
 // <locale>
 
 // template <class charT> class ctype_byname;
