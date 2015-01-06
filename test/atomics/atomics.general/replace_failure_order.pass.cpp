@@ -7,6 +7,8 @@
 //
 //===----------------------------------------------------------------------===//
 
+// UNSUPPORTED: libcpp-has-no-threads
+
 // This test verifies behavior specified by [atomics.types.operations.req]/21:
 //
 //     When only one memory_order argument is supplied, the value of success is
@@ -25,7 +27,7 @@
 int main() {
     std::atomic<int> i;
     volatile std::atomic<int> v;
-    int exp;
+    int exp = 0;
 
     i.compare_exchange_weak(exp, 0, std::memory_order_acq_rel);
     i.compare_exchange_weak(exp, 0, std::memory_order_release);
