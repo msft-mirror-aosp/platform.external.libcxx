@@ -95,7 +95,6 @@ cc_library_shared {
         },
         host: {
             ldflags: ["-nodefaultlibs"],
-            host_ldlibs: ["-lc"],
         },
         darwin: {
             ldflags: [
@@ -110,7 +109,6 @@ cc_library_shared {
                 "-lrt",
                 "-lpthread",
                 "-ldl",
-                "-lm",
             ],
         },
     },
