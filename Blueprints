@@ -71,14 +71,6 @@ cc_library_static {
         "libc++abi",
     ],
     stl: "none",
-    target: {
-        android: {
-            whole_static_libs: ["libcompiler_rt"],
-        },
-        linux: {
-            whole_static_libs: ["libcompiler_rt"],
-        },
-    },
 }
 
 // host + device dynamic lib
@@ -92,6 +84,7 @@ cc_library_shared {
     target: {
         android: {
             shared_libs: ["libdl"],
+            static_libs: ["libunwind_llvm"],
         },
         host: {
             ldflags: ["-nodefaultlibs"],
