@@ -91,9 +91,9 @@ cc_library_shared {
         },
         darwin: {
             ldflags: [
-                "-Wl,-unexported_symbols_list,external/libcxx/lib/libc++unexp.exp",
-                "-Wl,-force_symbols_not_weak_list,external/libcxx/lib/notweak.exp",
-                "-Wl,-force_symbols_weak_list,external/libcxx/lib/weak.exp",
+                "-Wl,-unexported_symbols_list,${SrcDir}/external/libcxx/lib/libc++unexp.exp",
+                "-Wl,-force_symbols_not_weak_list,${SrcDir}/external/libcxx/lib/notweak.exp",
+                "-Wl,-force_symbols_weak_list,${SrcDir}/external/libcxx/lib/weak.exp",
             ],
         },
 
