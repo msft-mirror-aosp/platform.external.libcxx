@@ -1,3 +1,6 @@
+# Android edit. We're still bad people and build to the source directory :(
+/libs/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
