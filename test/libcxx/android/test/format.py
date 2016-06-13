@@ -46,7 +46,7 @@ class TestFormat(HostTestFormat):
             timeout,
             exec_env)
         self.device_dir = device_dir
-        self.executor = TimeoutExecutor(timeout, AdbExecutor())
+        self.executor = AdbExecutor(device_dir)
 
     def _working_directory(self, file_name):
         return os.path.join(self.device_dir, file_name)
