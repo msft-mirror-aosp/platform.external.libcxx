@@ -1,3 +1,5 @@
+import os.path
+import random
 import time
 
 import libcxx.test.executor
@@ -7,21 +9,20 @@ from lit.util import executeCommand  # pylint: disable=import-error
 
 
 class AdbExecutor(libcxx.test.executor.RemoteExecutor):
-    def __init__(self, serial=None):
+    def __init__(self, device_dir, serial=None):
         # TODO(danalbert): Should factor out the shared pieces of SSHExecutor
         # so we don't have this ugly parent constructor...
         super(AdbExecutor, self).__init__()
+        self.device_dir = device_dir
         self.serial = serial
         self.local_run = executeCommand
 
     def _remote_temp(self, is_dir):
-        dir_arg = '-d' if is_dir else ''
-        cmd = 'mktemp -q {} /data/local/tmp/libcxx.XXXXXXXXXX'.format(dir_arg)
-        _, temp_path, err, exitCode = self._execute_command_remote([cmd])
-        temp_path = temp_path.strip()
-        if exitCode != 0:
-            raise RuntimeError(err)
-        return temp_path
+        # Android didn't have mktemp until M :(
+        # Just use a random number generator and hope for no collisions. Should
+        # be very unlikely for a 64-bit number.
+        test_dir_name = 'test.{}'.format(random.randrange(2 ** 64))
+        return os.path.join(self.device_dir, test_dir_name)
 
     def _copy_in_file(self, src, dst):  # pylint: disable=no-self-use
         adb.push(src, dst)

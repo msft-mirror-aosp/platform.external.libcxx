@@ -1,5 +1,7 @@
 import os
 
+import lit.util  # pylint: disable=import-error
+
 import libcxx.test.config
 import libcxx.test.target_info
 import libcxx.android.build
@@ -80,7 +82,9 @@ class Configuration(libcxx.test.config.Configuration):
         self.config.available_features.add('long_tests')
 
     def get_test_format(self):
-        tmp_dir = getattr(self.config, 'device_dir', '/data/local/tmp/')
+        # Note that we require that the caller has cleaned this directory,
+        # ensured its existence, and copied libc++_shared.so into it.
+        tmp_dir = getattr(self.config, 'device_dir', '/data/local/tmp/libcxx')
 
         return libcxx.android.test.format.TestFormat(
             self.cxx,
