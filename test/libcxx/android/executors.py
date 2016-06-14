@@ -36,7 +36,7 @@ class AdbExecutor(libcxx.test.executor.RemoteExecutor):
 
         env_cmd = []
         if env is not None:
-            env_cmd = ['env'] + ['%s=%s' % (k, v) for k, v in env.items()]
+            env_cmd = ['%s=%s' % (k, v) for k, v in env.items()]
 
         remote_cmd = ' '.join(env_cmd + [probe_cmd])
         if remote_work_dir != '.':
