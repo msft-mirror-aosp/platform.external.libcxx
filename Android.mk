@@ -122,6 +122,10 @@ LOCAL_EXPORT_CPPFLAGS := $(libcxx_export_cxxflags)
 LOCAL_EXPORT_LDFLAGS := $(libcxx_export_ldflags)
 LOCAL_STATIC_LIBRARIES := libc++abi android_support
 LOCAL_LDFLAGS := $(libcxx_ldflags)
+# Use --as-needed to strip the DT_NEEDED on libstdc++.so (bionic's) that the
+# driver always links for C++ but we don't use.
+# See https://github.com/android-ndk/ndk/issues/105
+LOCAL_LDFLAGS += -Wl,--as-needed
 
 # We use the LLVM unwinder for all the 32-bit ARM targets.
 ifneq (,$(filter armeabi%,$(TARGET_ARCH_ABI)))
@@ -130,7 +134,7 @@ endif
 
 # But only need -latomic for armeabi.
 ifeq ($(TARGET_ARCH_ABI),armeabi)
-    LOCAL_LDLIBS := -latomic
+    LOCAL_LDLIBS += -latomic
 endif
 include $(BUILD_SHARED_LIBRARY)
 
