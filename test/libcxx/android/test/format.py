@@ -46,7 +46,7 @@ class TestFormat(HostTestFormat):
             timeout,
             exec_env)
         self.device_dir = device_dir
-        self.executor = TimeoutExecutor(timeout, AdbExecutor())
+        self.executor = AdbExecutor(device_dir)
 
     def _working_directory(self, file_name):
         return os.path.join(self.device_dir, file_name)
@@ -82,7 +82,7 @@ class TestFormat(HostTestFormat):
 
     def _clean(self, exec_path):
         exec_file = os.path.basename(exec_path)
-        cmd = ['adb', 'shell', 'rm', '-rf', self._working_directory(exec_file)]
+        cmd = ['adb', 'shell', 'rm', '-r', self._working_directory(exec_file)]
         lit.util.executeCommand(cmd)
         try:
             os.remove(exec_path)
