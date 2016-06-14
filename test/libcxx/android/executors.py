@@ -49,7 +49,7 @@ class AdbExecutor(libcxx.test.executor.RemoteExecutor):
         # it by just waiting a second and then retrying.
         for _ in range(10):
             out, err, exit_code = self.local_run(adb_cmd)
-            if 'Text file busy' in out:
+            if 'Text file busy' in out or 'text busy' in out:
                 time.sleep(1)
             else:
                 out, delim, rc_str = out.rpartition(delimiter)
