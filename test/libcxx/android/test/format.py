@@ -82,7 +82,7 @@ class TestFormat(HostTestFormat):
 
     def _clean(self, exec_path):
         exec_file = os.path.basename(exec_path)
-        cmd = ['adb', 'shell', 'rm', '-rf', self._working_directory(exec_file)]
+        cmd = ['adb', 'shell', 'rm', '-r', self._working_directory(exec_file)]
         lit.util.executeCommand(cmd)
         try:
             os.remove(exec_path)
