@@ -77,6 +77,7 @@ ifneq ($(LIBCXX_FORCE_REBUILD),true)
 $(call ndk_log,Using prebuilt libc++ libraries)
 
 android_support_c_includes := $(LOCAL_PATH)/../../android/support/include
+libcxxabi_c_includes := $(LOCAL_PATH)/../llvm-libc++abi/include
 
 include $(CLEAR_VARS)
 LOCAL_MODULE := c++_static
@@ -89,7 +90,10 @@ include $(PREBUILT_STATIC_LIBRARY)
 include $(CLEAR_VARS)
 LOCAL_MODULE := c++_shared
 LOCAL_SRC_FILES := libs/$(TARGET_ARCH_ABI)/lib$(LOCAL_MODULE)$(TARGET_SONAME_EXTENSION)
-LOCAL_EXPORT_C_INCLUDES := $(libcxx_export_includes) $(android_support_c_includes)
+LOCAL_EXPORT_C_INCLUDES := \
+    $(libcxx_export_includes) \
+    $(libcxxabi_c_includes) \
+    $(android_support_c_includes)
 LOCAL_EXPORT_CPPFLAGS := $(libcxx_export_cxxflags)
 LOCAL_EXPORT_LDFLAGS := $(libcxx_export_ldflags)
 include $(PREBUILT_SHARED_LIBRARY)
