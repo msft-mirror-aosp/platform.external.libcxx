@@ -105,6 +105,8 @@ else
 
 $(call ndk_log,Rebuilding libc++ libraries from sources)
 
+android_support_c_includes := $(LOCAL_PATH)/../../ndk/sources/android/support/include
+
 include $(CLEAR_VARS)
 LOCAL_MODULE := c++_static
 LOCAL_SRC_FILES := $(libcxx_sources)
@@ -121,7 +123,7 @@ include $(BUILD_STATIC_LIBRARY)
 include $(CLEAR_VARS)
 LOCAL_MODULE := c++_shared
 LOCAL_WHOLE_STATIC_LIBRARIES := c++_static
-LOCAL_EXPORT_C_INCLUDES := $(libcxx_export_includes)
+LOCAL_EXPORT_C_INCLUDES := $(libcxx_export_includes) $(android_support_c_includes)
 LOCAL_EXPORT_CPPFLAGS := $(libcxx_export_cxxflags)
 LOCAL_EXPORT_LDFLAGS := $(libcxx_export_ldflags)
 LOCAL_STATIC_LIBRARIES := libc++abi android_support
