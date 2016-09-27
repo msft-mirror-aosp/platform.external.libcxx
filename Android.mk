@@ -98,6 +98,15 @@ LOCAL_EXPORT_CPPFLAGS := $(libcxx_export_cxxflags)
 LOCAL_EXPORT_LDFLAGS := $(libcxx_export_ldflags)
 include $(PREBUILT_SHARED_LIBRARY)
 
+ifneq (,$(filter armeabi%,$(TARGET_ARCH_ABI)))
+# We define this module here rather than in a separate cxx-stl/libunwind because
+# we don't actually want to make the API available (yet).
+include $(CLEAR_VARS)
+LOCAL_MODULE := libunwind
+LOCAL_SRC_FILES := libs/$(TARGET_ARCH_ABI)/$(LOCAL_MODULE)$(TARGET_LIB_EXTENSION)
+include $(PREBUILT_STATIC_LIBRARY)
+endif
+
 $(call import-module, cxx-stl/llvm-libc++abi)
 
 else
