@@ -85,6 +85,11 @@ LOCAL_SRC_FILES := libs/$(TARGET_ARCH_ABI)/lib$(LOCAL_MODULE)$(TARGET_LIB_EXTENS
 LOCAL_EXPORT_C_INCLUDES := $(libcxx_export_includes) $(android_support_c_includes)
 LOCAL_EXPORT_CPPFLAGS := $(libcxx_export_cxxflags)
 LOCAL_EXPORT_LDFLAGS := $(libcxx_export_ldflags)
+
+# We use the LLVM unwinder for all the 32-bit ARM targets.
+ifneq (,$(filter armeabi%,$(TARGET_ARCH_ABI)))
+    LOCAL_EXPORT_STATIC_LIBRARIES += libunwind
+endif
 include $(PREBUILT_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
@@ -96,6 +101,11 @@ LOCAL_EXPORT_C_INCLUDES := \
     $(android_support_c_includes)
 LOCAL_EXPORT_CPPFLAGS := $(libcxx_export_cxxflags)
 LOCAL_EXPORT_LDFLAGS := $(libcxx_export_ldflags)
+
+# We use the LLVM unwinder for all the 32-bit ARM targets.
+ifneq (,$(filter armeabi%,$(TARGET_ARCH_ABI)))
+    LOCAL_EXPORT_STATIC_LIBRARIES += libunwind
+endif
 include $(PREBUILT_SHARED_LIBRARY)
 
 ifneq (,$(filter armeabi%,$(TARGET_ARCH_ABI)))
@@ -127,6 +137,13 @@ LOCAL_EXPORT_C_INCLUDES := $(libcxx_export_includes)
 LOCAL_EXPORT_CPPFLAGS := $(libcxx_export_cxxflags)
 LOCAL_EXPORT_LDFLAGS := $(libcxx_export_ldflags)
 LOCAL_STATIC_LIBRARIES := libc++abi android_support
+
+# We use the LLVM unwinder for all the 32-bit ARM targets.
+ifneq (,$(filter armeabi%,$(TARGET_ARCH_ABI)))
+    LOCAL_STATIC_LIBRARIES += libunwind
+    LOCAL_EXPORT_STATIC_LIBRARIES += libunwind
+endif
+
 include $(BUILD_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
@@ -145,6 +162,7 @@ LOCAL_LDFLAGS += -Wl,--as-needed
 # We use the LLVM unwinder for all the 32-bit ARM targets.
 ifneq (,$(filter armeabi%,$(TARGET_ARCH_ABI)))
     LOCAL_STATIC_LIBRARIES += libunwind
+    LOCAL_EXPORT_STATIC_LIBRARIES += libunwind
 endif
 
 # But only need -latomic for armeabi.
