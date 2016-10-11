@@ -131,11 +131,11 @@ include $(BUILD_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
 LOCAL_MODULE := c++_shared
-LOCAL_WHOLE_STATIC_LIBRARIES := c++_static
+LOCAL_WHOLE_STATIC_LIBRARIES := c++_static libc++abi
 LOCAL_EXPORT_C_INCLUDES := $(libcxx_export_includes) $(android_support_c_includes)
 LOCAL_EXPORT_CPPFLAGS := $(libcxx_export_cxxflags)
 LOCAL_EXPORT_LDFLAGS := $(libcxx_export_ldflags)
-LOCAL_STATIC_LIBRARIES := libc++abi android_support
+LOCAL_STATIC_LIBRARIES := android_support
 LOCAL_LDFLAGS := $(libcxx_ldflags)
 # Use --as-needed to strip the DT_NEEDED on libstdc++.so (bionic's) that the
 # driver always links for C++ but we don't use.
