@@ -76,13 +76,12 @@ ifneq ($(LIBCXX_FORCE_REBUILD),true)
 
 $(call ndk_log,Using prebuilt libc++ libraries)
 
-android_support_c_includes := $(LOCAL_PATH)/../../android/support/include
 libcxxabi_c_includes := $(LOCAL_PATH)/../llvm-libc++abi/include
 
 include $(CLEAR_VARS)
 LOCAL_MODULE := c++_static
 LOCAL_SRC_FILES := libs/$(TARGET_ARCH_ABI)/lib$(LOCAL_MODULE)$(TARGET_LIB_EXTENSION)
-LOCAL_EXPORT_C_INCLUDES := $(libcxx_export_includes) $(android_support_c_includes)
+LOCAL_EXPORT_C_INCLUDES := $(libcxx_export_includes)
 LOCAL_EXPORT_CPPFLAGS := $(libcxx_export_cxxflags)
 LOCAL_EXPORT_LDFLAGS := $(libcxx_export_ldflags)
 
@@ -98,7 +97,11 @@ LOCAL_SRC_FILES := libs/$(TARGET_ARCH_ABI)/lib$(LOCAL_MODULE)$(TARGET_SONAME_EXT
 LOCAL_EXPORT_C_INCLUDES := \
     $(libcxx_export_includes) \
     $(libcxxabi_c_includes) \
-    $(android_support_c_includes)
+
+# This doesn't affect the prebuilt itself since this is a prebuilt library, but
+# the build system needs to know about the dependency so we can sort the
+# exported includes properly.
+LOCAL_STATIC_LIBRARIES := libandroid_support
 LOCAL_EXPORT_CPPFLAGS := $(libcxx_export_cxxflags)
 LOCAL_EXPORT_LDFLAGS := $(libcxx_export_ldflags)
 
@@ -124,12 +127,10 @@ else
 
 $(call ndk_log,Rebuilding libc++ libraries from sources)
 
-android_support_c_includes := $(LOCAL_PATH)/../../ndk/sources/android/support/include
-
 include $(CLEAR_VARS)
 LOCAL_MODULE := c++_static
 LOCAL_SRC_FILES := $(libcxx_sources)
-LOCAL_C_INCLUDES := $(libcxx_includes) $(android_support_c_includes)
+LOCAL_C_INCLUDES := $(libcxx_includes)
 LOCAL_CFLAGS := $(libcxx_cflags)
 LOCAL_CPPFLAGS := $(libcxx_cxxflags)
 LOCAL_CPP_FEATURES := rtti exceptions
@@ -149,7 +150,7 @@ include $(BUILD_STATIC_LIBRARY)
 include $(CLEAR_VARS)
 LOCAL_MODULE := c++_shared
 LOCAL_WHOLE_STATIC_LIBRARIES := c++_static libc++abi
-LOCAL_EXPORT_C_INCLUDES := $(libcxx_export_includes) $(android_support_c_includes)
+LOCAL_EXPORT_C_INCLUDES := $(libcxx_export_includes)
 LOCAL_EXPORT_CPPFLAGS := $(libcxx_export_cxxflags)
 LOCAL_EXPORT_LDFLAGS := $(libcxx_export_ldflags)
 LOCAL_STATIC_LIBRARIES := android_support
