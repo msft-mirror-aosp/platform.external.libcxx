@@ -64,6 +64,7 @@ class Configuration(libcxx.test.config.Configuration):
         self.cxx.link_flags.append('-gcc-toolchain')
         self.cxx.link_flags.append(gcc_toolchain)
 
+        self.cxx.link_flags.append('-landroid_support')
         triple = self.get_lit_conf('target_triple')
         if triple.startswith('arm-'):
             self.cxx.link_flags.append('-lunwind')
@@ -75,7 +76,9 @@ class Configuration(libcxx.test.config.Configuration):
         self.cxx.link_flags.append('-lc')
         self.cxx.link_flags.append('-lm')
         self.cxx.link_flags.append('-ldl')
-        self.cxx.link_flags.append('-pie')
+        device_api = int(self.get_lit_conf('device_api_level'))
+        if device_api >= 16:
+            self.cxx.link_flags.append('-pie')
 
     def configure_features(self):
         self.config.available_features.add('c++11')
