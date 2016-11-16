@@ -15,6 +15,9 @@ class AndroidTargetInfo(libcxx.test.target_info.DefaultTargetInfo):
     def system(self):
         raise NotImplementedError
 
+    def add_cxx_compile_flags(self, flags):
+        flags.extend(['-D__STDC_FORMAT_MACROS'])
+
     def platform_ver(self):
         raise NotImplementedError
 
