@@ -112,6 +112,7 @@ class Configuration(libcxx.test.config.Configuration):
         # Note that we require that the caller has cleaned this directory,
         # ensured its existence, and copied libc++_shared.so into it.
         tmp_dir = getattr(self.config, 'device_dir', '/data/local/tmp/libcxx')
+        build_only = self.get_lit_conf('build_only', False)
 
         return libcxx.android.test.format.TestFormat(
             self.cxx,
@@ -119,4 +120,5 @@ class Configuration(libcxx.test.config.Configuration):
             self.libcxx_obj_root,
             tmp_dir,
             getattr(self.config, 'timeout', '300'),
-            exec_env={'LD_LIBRARY_PATH': tmp_dir})
+            exec_env={'LD_LIBRARY_PATH': tmp_dir},
+            build_only=build_only)

@@ -64,3 +64,9 @@ class AdbExecutor(libcxx.test.executor.RemoteExecutor):
                 except ValueError:
                     continue
         return adb_cmd, out, err, exit_code
+
+
+class NoopExecutor(libcxx.test.executor.Executor):
+    def run(self, exe_path, cmd=None, work_dir='.', file_deps=None, env=None):
+        cmd = cmd or [exe_path]
+        return (cmd, '', '', 0)
