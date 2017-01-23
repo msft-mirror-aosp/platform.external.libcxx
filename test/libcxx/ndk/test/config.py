@@ -93,6 +93,8 @@ class Configuration(libcxx.test.config.Configuration):
         if triple.startswith('arm-'):
             self.cxx.link_flags.append('-lunwind')
             self.cxx.link_flags.append('-latomic')
+        elif triple.startswith('mipsel-'):
+            self.cxx.link_flags.append('-latomic')
 
         self.cxx.link_flags.append('-lgcc')
 
