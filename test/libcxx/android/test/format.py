@@ -91,6 +91,3 @@ class TestFormat(HostTestFormat):
             os.remove(exec_path)
         except OSError:
             pass
-
-    def _run(self, exec_path, _, in_dir=None):
-        raise NotImplementedError()

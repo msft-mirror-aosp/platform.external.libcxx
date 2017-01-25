@@ -5,7 +5,7 @@ import lit.util  # pylint: disable=import-error
 import libcxx.test.config
 import libcxx.test.target_info
 import libcxx.android.build
-import libcxx.android.test.format
+import libcxx.ndk.test.format
 
 
 class AndroidTargetInfo(libcxx.test.target_info.DefaultTargetInfo):
@@ -116,7 +116,7 @@ class Configuration(libcxx.test.config.Configuration):
         tmp_dir = getattr(self.config, 'device_dir', '/data/local/tmp/libcxx')
         build_only = self.get_lit_conf('build_only', False)
 
-        return libcxx.android.test.format.TestFormat(
+        return libcxx.ndk.test.format.TestFormat(
             self.cxx,
             self.libcxx_src_root,
             self.libcxx_obj_root,
