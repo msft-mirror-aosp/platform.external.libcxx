@@ -102,8 +102,7 @@ class Configuration(libcxx.test.config.Configuration):
         self.cxx.link_flags.append('-lc')
         self.cxx.link_flags.append('-lm')
         self.cxx.link_flags.append('-ldl')
-        device_api = int(self.get_lit_conf('device_api_level'))
-        if device_api >= 16:
+        if self.get_lit_bool('use_pie'):
             self.cxx.link_flags.append('-pie')
 
     def configure_features(self):
