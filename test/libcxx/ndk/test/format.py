@@ -1,5 +1,8 @@
 """Test format for the NDK tests."""
+import os
+
 import libcxx.android.test.format
+import lit.util  # pylint: disable=import-error
 
 
 def prune_xfails(test):
@@ -24,3 +27,14 @@ class TestFormat(libcxx.android.test.format.TestFormat):
         """Clears the test's xfail list before delegating to the parent."""
         prune_xfails(test)
         return super(TestFormat, self)._evaluate_fail_test(test)
+
+    def _clean(self, exec_path):
+        exec_file = os.path.basename(exec_path)
+        if not self.build_only:
+            device_path = self._working_directory(exec_file)
+            cmd = ['adb', 'shell', 'rm', '-r', device_path]
+            lit.util.executeCommand(cmd)
+        try:
+            os.remove(exec_path)
+        except OSError:
+            pass

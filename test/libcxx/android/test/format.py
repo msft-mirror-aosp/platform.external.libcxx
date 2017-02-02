@@ -46,7 +46,8 @@ class TestFormat(HostTestFormat):
             timeout,
             exec_env)
         self.device_dir = device_dir
-        if build_only:
+        self.build_only = build_only
+        if self.build_only:
             self.executor = NoopExecutor()
         else:
             self.executor = AdbExecutor(device_dir)
