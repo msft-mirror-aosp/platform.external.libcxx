@@ -61,7 +61,10 @@ class AdbExecutor(libcxx.test.executor.RemoteExecutor):
         print 'Running {}'.format(' '.join(adb_cmd))
         out, err, exit_code = self.local_run(adb_cmd)
         assert 'Text file busy' not in out and 'text busy' not in out
-        out, delim, rc_str = out.rpartition(delimiter)
+        out, _, rc_str = out.rpartition(delimiter)
+        if rc_str == '':
+            result_text = 'Did not receive exit status from test.'
+            return adb_cmd, result_text, '', 1
 
         out = out.strip()
         exit_code = int(rc_str)
