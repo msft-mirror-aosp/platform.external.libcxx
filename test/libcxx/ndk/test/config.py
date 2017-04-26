@@ -114,11 +114,13 @@ class Configuration(libcxx.test.config.Configuration):
         # ensured its existence, and copied libc++_shared.so into it.
         tmp_dir = getattr(self.config, 'device_dir', '/data/local/tmp/libcxx')
         build_only = self.get_lit_conf('build_only', False)
+        build_dir = self.get_lit_conf('build_dir')
 
         return libcxx.ndk.test.format.TestFormat(
             self.cxx,
             self.libcxx_src_root,
             self.libcxx_obj_root,
+            build_dir,
             tmp_dir,
             getattr(self.config, 'timeout', '300'),
             exec_env={'LD_LIBRARY_PATH': tmp_dir},

@@ -27,7 +27,6 @@ class AdbExecutor(libcxx.test.executor.RemoteExecutor):
     def _copy_in_file(self, src, dst):
         device_dirname = posixpath.dirname(dst)
         device_temp_path = posixpath.join(device_dirname, 'temp.exe')
-        print 'Pushing {} to {}'.format(src, device_temp_path)
         adb.push(src, device_temp_path)
 
         # `adb push`ed executables can fail with ETXTBSY because adbd doesn't
@@ -58,7 +57,6 @@ class AdbExecutor(libcxx.test.executor.RemoteExecutor):
             remote_cmd = 'cd {} && {}'.format(remote_work_dir, remote_cmd)
 
         adb_cmd.append(remote_cmd)
-        print 'Running {}'.format(' '.join(adb_cmd))
         out, err, exit_code = self.local_run(adb_cmd)
         assert 'Text file busy' not in out and 'text busy' not in out
         out, _, rc_str = out.rpartition(delimiter)

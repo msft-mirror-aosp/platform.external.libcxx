@@ -17,9 +17,24 @@ def prune_xfails(test):
 class TestFormat(libcxx.android.test.format.TestFormat):
     """Loose wrapper around the Android format that disables XFAIL handling."""
 
+    # pylint: disable=too-many-arguments
+    def __init__(self, cxx, libcxx_src_root, libcxx_obj_root, build_dir,
+                 device_dir, timeout, exec_env=None, build_only=False):
+        libcxx.android.test.format.TestFormat.__init__(
+            self,
+            cxx,
+            libcxx_src_root,
+            libcxx_obj_root,
+            device_dir,
+            timeout,
+            exec_env,
+            build_only)
+        self.build_dir = build_dir
+
     def _evaluate_pass_test(self, test, tmp_base, lit_config):
         """Clears the test's xfail list before delegating to the parent."""
         prune_xfails(test)
+        tmp_base = os.path.join(self.build_dir, *test.path_in_suite)
         return super(TestFormat, self)._evaluate_pass_test(
             test, tmp_base, lit_config)
 
@@ -34,7 +49,3 @@ class TestFormat(libcxx.android.test.format.TestFormat):
             device_path = self._working_directory(exec_file)
             cmd = ['adb', 'shell', 'rm', '-r', device_path]
             lit.util.executeCommand(cmd)
-        try:
-            os.remove(exec_path)
-        except OSError:
-            pass
