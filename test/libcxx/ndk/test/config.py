@@ -55,7 +55,7 @@ class Configuration(libcxx.test.config.Configuration):
 
         unified_headers = self.get_lit_bool('unified_headers')
         arch = self.get_lit_conf('arch')
-        api = self.get_lit_conf('target_api')
+        api = self.get_lit_conf('api')
 
         sysroot_path = 'platforms/android-{}/arch-{}'.format(api, arch)
         platform_sysroot = os.path.join(os.environ['NDK'], sysroot_path)
