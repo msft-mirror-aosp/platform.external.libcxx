@@ -51,8 +51,7 @@ libcxx_sources := \
 
 libcxx_sources := $(libcxx_sources:%=src/%)
 
-# For now, this library can only be used to build C++11 binaries.
-libcxx_export_cxxflags := -std=c++11
+libcxx_export_cxxflags :=
 
 ifeq (,$(filter clang%,$(NDK_TOOLCHAIN_VERSION)))
 # Add -fno-strict-aliasing because __list_imp::_end_ breaks TBAA rules by declaring
@@ -61,7 +60,7 @@ ifeq (,$(filter clang%,$(NDK_TOOLCHAIN_VERSION)))
 libcxx_export_cxxflags += -fno-strict-aliasing
 endif
 
-libcxx_cxxflags := $(libcxx_export_cxxflags)
+libcxx_cxxflags := -std=c++11 $(libcxx_export_cxxflags)
 libcxx_cflags := -D__STDC_FORMAT_MACROS -DLIBCXX_BUILDING_LIBCXXABI
 
 libcxx_ldflags :=
