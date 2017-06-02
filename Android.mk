@@ -60,8 +60,13 @@ ifeq (,$(filter clang%,$(NDK_TOOLCHAIN_VERSION)))
 libcxx_export_cxxflags += -fno-strict-aliasing
 endif
 
-libcxx_cxxflags := -std=c++11 $(libcxx_export_cxxflags)
-libcxx_cflags := -D__STDC_FORMAT_MACROS -DLIBCXX_BUILDING_LIBCXXABI
+libcxx_cxxflags := \
+    -std=c++11 \
+    -DLIBCXX_BUILDING_LIBCXXABI \
+    -D_LIBCPP_BUILDING_LIBRARY \
+    -D_LIBCPP_DISABLE_NEW_DELETE_DEFINITIONS \
+    -D__STDC_FORMAT_MACROS \
+    $(libcxx_export_cxxflags) \
 
 libcxx_ldflags :=
 libcxx_export_ldflags :=
@@ -130,7 +135,6 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := c++_static
 LOCAL_SRC_FILES := $(libcxx_sources)
 LOCAL_C_INCLUDES := $(libcxx_includes)
-LOCAL_CFLAGS := $(libcxx_cflags)
 LOCAL_CPPFLAGS := $(libcxx_cxxflags)
 LOCAL_CPP_FEATURES := rtti exceptions
 LOCAL_EXPORT_C_INCLUDES := $(libcxx_export_includes)
