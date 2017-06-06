@@ -26,7 +26,9 @@ config.cxx_under_test = os.path.join(
 config.std = "c++11"
 config.libcxx_src_root = libcxx_dir
 config.libcxx_obj_root = libcxx_dir
+config.cxx_include = os.path.join(libcxx_dir, "include")
 config.cxx_library_root = os.path.join(libcxx_dir, "libs", abi)
+config.use_target = "True"
 config.enable_exceptions = "True"
 config.enable_rtti = "True"
 config.enable_shared = "False"
@@ -41,5 +43,6 @@ config.gcc_toolchain = os.path.join(
     ndk, "toolchains", toolchain + "-4.9", "prebuilt", host_tag)
 
 # Let the main config do the real work.
+config.loaded_site_config = True
 lit_config.load_config(
     config, os.path.join(libcxx_dir, "test/lit.cfg"))

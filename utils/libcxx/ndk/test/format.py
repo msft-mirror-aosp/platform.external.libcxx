@@ -31,17 +31,19 @@ class TestFormat(libcxx.android.test.format.TestFormat):
             build_only)
         self.build_dir = build_dir
 
-    def _evaluate_pass_test(self, test, tmp_base, lit_config):
+    def _evaluate_pass_test(self, test, tmp_base, lit_config, test_cxx,
+                            parsers):
         """Clears the test's xfail list before delegating to the parent."""
         prune_xfails(test)
         tmp_base = os.path.join(self.build_dir, *test.path_in_suite)
         return super(TestFormat, self)._evaluate_pass_test(
-            test, tmp_base, lit_config)
+            test, tmp_base, lit_config, test_cxx, parsers)
 
-    def _evaluate_fail_test(self, test):
+    def _evaluate_fail_test(self, test, test_cxx, parsers):
         """Clears the test's xfail list before delegating to the parent."""
         prune_xfails(test)
-        return super(TestFormat, self)._evaluate_fail_test(test)
+        return super(TestFormat, self)._evaluate_fail_test(
+            test, test_cxx, parsers)
 
     def _clean(self, exec_path):
         exec_file = os.path.basename(exec_path)

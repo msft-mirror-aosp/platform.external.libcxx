@@ -42,6 +42,7 @@ class Configuration(libcxx.test.config.Configuration):
         self.configure_triple()
         self.configure_src_root()
         self.configure_obj_root()
+        self.configure_cxx_stdlib_under_test()
         self.configure_cxx_library_root()
         self.configure_compile_flags()
         self.configure_link_flags()
