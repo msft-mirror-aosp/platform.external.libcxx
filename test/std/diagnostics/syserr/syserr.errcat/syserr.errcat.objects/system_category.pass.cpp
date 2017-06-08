@@ -24,7 +24,12 @@ void test_message_for_bad_value() {
     errno = E2BIG; // something that message will never generate
     const std::error_category& e_cat1 = std::system_category();
     const std::string msg = e_cat1.message(-1);
+#ifdef __ANDROID__
+    // Old versions of Android had a slightly different output format.
+    LIBCPP_ASSERT(msg == "Unknown error -1" || msg == "Unknown error: -1");
+#else
     LIBCPP_ASSERT(msg == "Unknown error -1");
+#endif
     assert(errno == E2BIG);
 }
 
