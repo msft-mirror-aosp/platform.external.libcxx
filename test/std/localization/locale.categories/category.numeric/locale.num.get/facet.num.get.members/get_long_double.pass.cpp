@@ -34,6 +34,7 @@ public:
         : F(refs) {}
 };
 
+
 int main()
 {
     const my_facet f(1);
@@ -230,5 +231,29 @@ int main()
         FloatingPoint<long double> actual(v);
         FloatingPoint<long double> expected(304888344611713860501504000000.0L);
         assert(actual.AlmostEquals(expected));
+    }
+    {
+        v = -1;
+        const char str[] = "1.19973e+4933"; // unrepresentable
+        std::ios_base::iostate err = ios.goodbit;
+        input_iterator<const char*> iter =
+            f.get(input_iterator<const char*>(str),
+                  input_iterator<const char*>(str+sizeof(str)),
+                  ios, err, v);
+        assert(iter.base() == str+sizeof(str)-1);
+        assert(err == ios.failbit);
+        assert(v == HUGE_VALL);
+    }
+    {
+        v = -1;
+        const char str[] = "-1.18974e+4932"; // unrepresentable
+        std::ios_base::iostate err = ios.goodbit;
+        input_iterator<const char*> iter =
+            f.get(input_iterator<const char*>(str),
+                  input_iterator<const char*>(str+sizeof(str)),
+                  ios, err, v);
+        assert(iter.base() == str+sizeof(str)-1);
+        assert(err == ios.failbit);
+        assert(v == -HUGE_VALL);
     }
 }
