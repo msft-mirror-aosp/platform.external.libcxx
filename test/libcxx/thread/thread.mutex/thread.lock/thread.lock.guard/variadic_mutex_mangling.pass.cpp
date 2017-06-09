@@ -30,8 +30,16 @@
 #include <string>
 #include <typeinfo>
 #include <cassert>
+#include <sstream>
+
+#define _STRINGIFY(x) #x
+#define STRINGIFY(x) _STRINGIFY(x)
 
 int main() {
-    const std::string expect = "NSt3__110lock_guardIJNS_5mutexEEEE";
+    const std::string ns_name = STRINGIFY(_LIBCPP_NAMESPACE);
+    std::ostringstream string_builder;
+    string_builder << "NSt" << ns_name.size() << ns_name
+                   << "10lock_guardIJNS_5mutexEEEE";
+    const std::string expect = string_builder.str();
     assert(typeid(std::lock_guard<std::mutex>).name() == expect);
 }
