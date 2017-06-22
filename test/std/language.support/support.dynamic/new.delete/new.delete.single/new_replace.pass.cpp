@@ -17,23 +17,8 @@
 #include <cassert>
 #include <limits>
 
+#include "count_new.hpp"
 #include "test_macros.h"
-
-int new_called = 0;
-
-void* operator new(std::size_t s) TEST_THROW_SPEC(std::bad_alloc)
-{
-    ++new_called;
-    void* ret = std::malloc(s);
-    if (!ret) std::abort(); // placate MSVC's unchecked malloc warning
-    return ret;
-}
-
-void  operator delete(void* p) TEST_NOEXCEPT
-{
-    --new_called;
-    std::free(p);
-}
 
 bool A_constructed = false;
 
@@ -47,11 +32,13 @@ A *volatile ap;
 
 int main()
 {
+    globalMemCounter.reset();
+    assert(globalMemCounter.checkOutstandingNewEq(0));
     ap = new A;
     assert(ap);
     assert(A_constructed);
-    assert(new_called);
+    assert(globalMemCounter.checkOutstandingNewEq(1));
     delete ap;
     assert(!A_constructed);
-    assert(!new_called);
+    assert(globalMemCounter.checkOutstandingNewEq(0));
 }
