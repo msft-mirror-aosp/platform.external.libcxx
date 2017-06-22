@@ -66,6 +66,7 @@ struct LValueCallable {
 
 int main()
 {
+    globalMemCounter.reset();
     assert(globalMemCounter.checkOutstandingNewEq(0));
     {
     std::function<int(int)> f;

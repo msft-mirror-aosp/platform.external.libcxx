@@ -36,6 +36,7 @@ int A::count = 0;
 
 int main()
 {
+    globalMemCounter.reset();
     A* ptr = new A;
     assert(A::count == 1);
     globalMemCounter.throw_after = 0;

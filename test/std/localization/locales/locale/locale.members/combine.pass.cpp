@@ -67,6 +67,7 @@ std::locale::id my_facet::id;
 int main()
 {
 {
+    globalMemCounter.reset();
     {
         std::locale loc;
         std::locale loc2(loc, new my_facet);

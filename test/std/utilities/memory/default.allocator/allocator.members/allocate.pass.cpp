@@ -29,6 +29,7 @@ struct A
 
 int main()
 {
+    globalMemCounter.reset();
     std::allocator<A> a;
     assert(globalMemCounter.checkOutstandingNewEq(0));
     assert(A_constructed == 0);

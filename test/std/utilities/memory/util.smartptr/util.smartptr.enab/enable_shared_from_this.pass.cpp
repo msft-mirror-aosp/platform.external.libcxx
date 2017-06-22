@@ -51,6 +51,7 @@ struct Bar : public Foo {
 
 int main()
 {
+    globalMemCounter.reset();
     {  // https://bugs.llvm.org/show_bug.cgi?id=18843
     std::shared_ptr<T const> t1(new T);
     std::shared_ptr<T const> t2(std::make_shared<T>());
