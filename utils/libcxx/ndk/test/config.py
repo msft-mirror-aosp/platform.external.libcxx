@@ -35,6 +35,7 @@ class Configuration(libcxx.test.config.Configuration):
         self.build_cmds_dir = None
         self.cxx_template = None
         self.link_template = None
+        self.with_availability = False
 
     def configure(self):
         self.configure_target_info()
