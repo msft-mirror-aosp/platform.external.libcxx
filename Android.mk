@@ -27,6 +27,7 @@ libcxx_sources := \
     condition_variable.cpp \
     debug.cpp \
     exception.cpp \
+    functional.cpp \
     future.cpp \
     hash.cpp \
     ios.cpp \
@@ -47,7 +48,8 @@ libcxx_sources := \
     typeinfo.cpp \
     utility.cpp \
     valarray.cpp \
-    support/android/locale_android.cpp
+    variant.cpp \
+    vector.cpp \
 
 libcxx_sources := $(libcxx_sources:%=src/%)
 
