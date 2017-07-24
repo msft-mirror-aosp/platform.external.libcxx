@@ -108,7 +108,7 @@ class Configuration(libcxx.test.config.Configuration):
             self.cxx.link_flags.append('-pie')
 
     def configure_features(self):
-        self.config.available_features.add('c++11')
+        self.config.available_features.add(self.get_lit_conf('std'))
         self.config.available_features.add('long_tests')
 
     def get_test_format(self):
