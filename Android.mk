@@ -63,7 +63,7 @@ libcxx_export_cxxflags += -fno-strict-aliasing
 endif
 
 libcxx_cxxflags := \
-    -std=c++11 \
+    -std=c++1z \
     -DLIBCXX_BUILDING_LIBCXXABI \
     -D_LIBCPP_BUILDING_LIBRARY \
     -D_LIBCPP_DISABLE_NEW_DELETE_DEFINITIONS \
