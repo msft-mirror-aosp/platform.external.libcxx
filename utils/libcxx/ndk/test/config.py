@@ -67,6 +67,7 @@ class Configuration(libcxx.test.config.Configuration):
 
             triple = self.get_lit_conf('target_triple')
             header_triple = triple.rstrip('0123456789')
+            header_triple = header_triple.replace('armv7', 'arm')
             arch_includes = os.path.join(sysroot, 'usr/include', header_triple)
             self.cxx.compile_flags.extend(['-isystem', arch_includes])
 
