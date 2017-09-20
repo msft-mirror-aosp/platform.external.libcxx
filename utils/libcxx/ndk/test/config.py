@@ -95,11 +95,13 @@ class Configuration(libcxx.test.config.Configuration):
         triple = self.get_lit_conf('target_triple')
         if triple.startswith('arm-'):
             self.cxx.link_flags.append('-lunwind')
-            self.cxx.link_flags.append('-latomic')
-        elif triple.startswith('mipsel-'):
-            self.cxx.link_flags.append('-latomic')
+            self.cxx.link_flags.append('-Wl,--exclude-libs,libunwind.a')
+
+        self.cxx.link_flags.append('-latomic')
+        self.cxx.link_flags.append('-Wl,--exclude-libs,libatomic.a')
 
         self.cxx.link_flags.append('-lgcc')
+        self.cxx.link_flags.append('-Wl,--exclude-libs,libgcc.a')
 
         self.cxx.link_flags.append('-lc++_shared')
         self.cxx.link_flags.append('-lc')
