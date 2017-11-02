@@ -55,27 +55,27 @@ class Configuration(libcxx.test.config.Configuration):
     def configure_compile_flags(self):
         super(Configuration, self).configure_compile_flags()
 
-        unified_headers = self.get_lit_bool('unified_headers')
         arch = self.get_lit_conf('arch')
         api = self.get_lit_conf('api')
 
-        sysroot_path = 'platforms/android-{}/arch-{}'.format(api, arch)
-        platform_sysroot = os.path.join(os.environ['NDK'], sysroot_path)
-        if unified_headers:
-            sysroot = os.path.join(os.environ['NDK'], 'sysroot')
-            self.cxx.compile_flags.extend(['--sysroot', sysroot])
+        sysroot = os.path.join(os.environ['NDK'], 'sysroot')
+        self.cxx.compile_flags.extend(['--sysroot', sysroot])
 
-            triple = self.get_lit_conf('target_triple')
-            header_triple = triple.rstrip('0123456789')
-            header_triple = header_triple.replace('armv7', 'arm')
-            arch_includes = os.path.join(sysroot, 'usr/include', header_triple)
-            self.cxx.compile_flags.extend(['-isystem', arch_includes])
+        triple = self.get_lit_conf('target_triple')
+        header_triple = triple.rstrip('0123456789')
+        header_triple = header_triple.replace('armv7', 'arm')
+        arch_includes = os.path.join(sysroot, 'usr/include', header_triple)
+        self.cxx.compile_flags.extend(['-isystem', arch_includes])
 
-            self.cxx.compile_flags.append('-D__ANDROID_API__={}'.format(api))
+        self.cxx.compile_flags.append('-D__ANDROID_API__={}'.format(api))
 
-            self.cxx.link_flags.extend(['--sysroot', platform_sysroot])
-        else:
-            self.cxx.flags.extend(['--sysroot', platform_sysroot])
+        if arch == 'arm':
+            self.cxx.flags.extend([
+                '-march=armv7-a',
+                '-mfloat-abi=softfp',
+                '-mfpu=vfpv3-d16',
+                '-mthumb',
+            ])
 
         android_support_headers = os.path.join(
             os.environ['NDK'], 'sources/android/support/include')
@@ -83,6 +83,13 @@ class Configuration(libcxx.test.config.Configuration):
 
     def configure_link_flags(self):
         self.cxx.link_flags.append('-nodefaultlibs')
+
+        arch = self.get_lit_conf('arch')
+        api = self.get_lit_conf('api')
+
+        sysroot_path = 'platforms/android-{}/arch-{}'.format(api, arch)
+        platform_sysroot = os.path.join(os.environ['NDK'], sysroot_path)
+        self.cxx.link_flags.extend(['--sysroot', platform_sysroot])
 
         # Configure libc++ library paths.
         self.cxx.link_flags.append('-L' + self.cxx_library_root)
