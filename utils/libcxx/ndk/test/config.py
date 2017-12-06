@@ -94,6 +94,8 @@ class Configuration(libcxx.test.config.Configuration):
         # Configure libc++ library paths.
         self.cxx.link_flags.append('-L' + self.cxx_library_root)
 
+        self.cxx.link_flags.append('-nostdlib++')
+
         gcc_toolchain = self.get_lit_conf('gcc_toolchain')
         self.cxx.link_flags.append('-gcc-toolchain')
         self.cxx.link_flags.append(gcc_toolchain)
