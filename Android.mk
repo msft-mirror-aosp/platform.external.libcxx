@@ -90,6 +90,7 @@ LOCAL_SRC_FILES := libs/$(TARGET_ARCH_ABI)/lib$(LOCAL_MODULE)$(TARGET_LIB_EXTENS
 LOCAL_EXPORT_C_INCLUDES := $(libcxx_export_includes)
 LOCAL_EXPORT_CPPFLAGS := $(libcxx_export_cxxflags)
 LOCAL_EXPORT_LDFLAGS := $(libcxx_export_ldflags)
+LOCAL_EXPORT_LDLIBS := -ldl
 
 # We use the LLVM unwinder for all the 32-bit ARM targets.
 ifneq (,$(filter armeabi%,$(TARGET_ARCH_ABI)))
