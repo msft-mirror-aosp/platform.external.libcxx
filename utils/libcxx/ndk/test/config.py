@@ -106,6 +106,10 @@ class Configuration(libcxx.test.config.Configuration):
             self.cxx.link_flags.append('-lunwind')
             self.cxx.link_flags.append('-Wl,--exclude-libs,libunwind.a')
 
+        self.cxx.link_flags.append('-lcompiler_rt-extras')
+        self.cxx.link_flags.append(
+            '-Wl,--exclude-libs,libcompiler_rt-extras.a')
+
         self.cxx.link_flags.append('-latomic')
         self.cxx.link_flags.append('-Wl,--exclude-libs,libatomic.a')
 
