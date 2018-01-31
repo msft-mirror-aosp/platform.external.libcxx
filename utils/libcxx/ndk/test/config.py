@@ -116,8 +116,7 @@ class Configuration(libcxx.test.config.Configuration):
         self.cxx.link_flags.append('-lc')
         self.cxx.link_flags.append('-lm')
         self.cxx.link_flags.append('-ldl')
-        if self.get_lit_bool('use_pie'):
-            self.cxx.link_flags.append('-pie')
+        self.cxx.link_flags.append('-pie')
 
     def configure_features(self):
         self.config.available_features.add(self.get_lit_conf('std'))
