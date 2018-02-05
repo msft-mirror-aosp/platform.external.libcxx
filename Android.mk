@@ -88,12 +88,17 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := c++_static
 LOCAL_SRC_FILES := libs/$(TARGET_ARCH_ABI)/lib$(LOCAL_MODULE)$(TARGET_LIB_EXTENSION)
 LOCAL_EXPORT_C_INCLUDES := $(libcxx_export_includes)
+
+# This doesn't affect the prebuilt itself since this is a prebuilt library, but
+# the build system needs to know about the dependency so we can sort the
+# exported includes properly.
+LOCAL_STATIC_LIBRARIES := libc++abi libandroid_support
 LOCAL_EXPORT_CPPFLAGS := $(libcxx_export_cxxflags)
 LOCAL_EXPORT_LDFLAGS := $(libcxx_export_ldflags)
-LOCAL_EXPORT_LDLIBS := -ldl
+LOCAL_EXPORT_STATIC_LIBRARIES := libc++abi libandroid_support
 
-# We use the LLVM unwinder for all the 32-bit ARM targets.
-ifneq (,$(filter armeabi%,$(TARGET_ARCH_ABI)))
+# We use the LLVM unwinder for 32-bit ARM.
+ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
     LOCAL_EXPORT_STATIC_LIBRARIES += libunwind
 endif
 include $(PREBUILT_STATIC_LIBRARY)
@@ -111,9 +116,10 @@ LOCAL_EXPORT_C_INCLUDES := \
 LOCAL_STATIC_LIBRARIES := libandroid_support
 LOCAL_EXPORT_CPPFLAGS := $(libcxx_export_cxxflags)
 LOCAL_EXPORT_LDFLAGS := $(libcxx_export_ldflags)
+LOCAL_EXPORT_STATIC_LIBRARIES := libandroid_support
 
-# We use the LLVM unwinder for all the 32-bit ARM targets.
-ifneq (,$(filter armeabi%,$(TARGET_ARCH_ABI)))
+# We use the LLVM unwinder for 32-bit ARM.
+ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
     LOCAL_EXPORT_STATIC_LIBRARIES += libunwind
 endif
 include $(PREBUILT_SHARED_LIBRARY)
@@ -124,6 +130,7 @@ ifneq (,$(filter armeabi%,$(TARGET_ARCH_ABI)))
 include $(CLEAR_VARS)
 LOCAL_MODULE := libunwind
 LOCAL_SRC_FILES := libs/$(TARGET_ARCH_ABI)/$(LOCAL_MODULE)$(TARGET_LIB_EXTENSION)
+LOCAL_EXPORT_LDLIBS := -ldl
 include $(PREBUILT_STATIC_LIBRARY)
 endif
 
