@@ -56,7 +56,7 @@ class Configuration(libcxx.test.config.Configuration):
         super(Configuration, self).configure_compile_flags()
 
         arch = self.get_lit_conf('arch')
-        api = self.get_lit_conf('api')
+        api = int(self.get_lit_conf('api'))
 
         sysroot = os.path.join(os.environ['NDK'], 'sysroot')
         self.cxx.compile_flags.extend(['--sysroot', sysroot])
@@ -77,15 +77,16 @@ class Configuration(libcxx.test.config.Configuration):
                 '-mthumb',
             ])
 
-        android_support_headers = os.path.join(
-            os.environ['NDK'], 'sources/android/support/include')
-        self.cxx.compile_flags.append('-I' + android_support_headers)
+        if api < 21:
+            android_support_headers = os.path.join(
+                os.environ['NDK'], 'sources/android/support/include')
+            self.cxx.compile_flags.append('-I' + android_support_headers)
 
     def configure_link_flags(self):
         self.cxx.link_flags.append('-nodefaultlibs')
 
         arch = self.get_lit_conf('arch')
-        api = self.get_lit_conf('api')
+        api = int(self.get_lit_conf('api'))
 
         sysroot_path = 'platforms/android-{}/arch-{}'.format(api, arch)
         platform_sysroot = os.path.join(os.environ['NDK'], sysroot_path)
@@ -100,7 +101,8 @@ class Configuration(libcxx.test.config.Configuration):
         self.cxx.link_flags.append('-gcc-toolchain')
         self.cxx.link_flags.append(gcc_toolchain)
 
-        self.cxx.link_flags.append('-landroid_support')
+        if api < 21:
+            self.cxx.link_flags.append('-landroid_support')
         triple = self.get_lit_conf('target_triple')
         if triple.startswith('arm-') or triple.startswith('armv7-'):
             self.cxx.link_flags.append('-lunwind')
