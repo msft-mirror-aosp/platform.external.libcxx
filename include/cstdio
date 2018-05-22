@@ -132,9 +132,15 @@ using ::putc;
 using ::ungetc;
 using ::fread;
 using ::fwrite;
+#if !defined(__ANDROID__) || !defined(__USE_FILE_OFFSET64) ||                  \
+    (__ANDROID_API__ >= __ANDROID_API_N__)
 using ::fgetpos;
+#endif
 using ::fseek;
+#if !defined(__ANDROID__) || !defined(__USE_FILE_OFFSET64) ||                  \
+    (__ANDROID_API__ >= __ANDROID_API_N__)
 using ::fsetpos;
+#endif
 using ::ftell;
 using ::rewind;
 using ::clearerr;
