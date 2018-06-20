@@ -190,12 +190,14 @@ class LinuxLocalTI(DefaultTargetInfo):
 
     def platform_name(self):
         name, _, _ = platform.linux_distribution()
-        name = name.lower().strip()
+        # Some distros have spaces, e.g. 'SUSE Linux Enterprise Server'
+        # lit features can't have spaces
+        name = name.lower().strip().replace(' ', '-')
         return name # Permitted to be None
 
     def platform_ver(self):
         _, ver, _ = platform.linux_distribution()
-        ver = ver.lower().strip()
+        ver = ver.lower().strip().replace(' ', '-')
         return ver # Permitted to be None.
 
     def add_locale_features(self, features):
@@ -232,7 +234,9 @@ class LinuxLocalTI(DefaultTargetInfo):
             flags += ['-lunwind', '-ldl']
         else:
             flags += ['-lgcc_s']
-        flags += ['-lgcc']
+        compiler_rt = self.full_config.get_lit_bool('compiler_rt', False)
+        if not compiler_rt:
+            flags += ['-lgcc']
         use_libatomic = self.full_config.get_lit_bool('use_libatomic', False)
         if use_libatomic:
             flags += ['-latomic']

@@ -13,13 +13,16 @@
 // template<class InputIterator, class OutputIterator, class T, class BinaryOperation>
 //     OutputIterator
 //     inclusive_scan(InputIterator first, InputIterator last,
-//                    OutputIterator result, 
+//                    OutputIterator result,
 //                    BinaryOperation binary_op); // C++17
 
 #include <numeric>
-#include <vector>
+#include <algorithm>
 #include <cassert>
+#include <functional>
 #include <iostream>
+#include <iterator>
+#include <vector>
 
 #include "test_iterators.h"
 
@@ -37,7 +40,7 @@ test(Iter1 first, Iter1 last, Op op, Iter2 rFirst, Iter2 rLast)
     v.clear();
     v.assign(first, last);
     std::inclusive_scan(v.begin(), v.end(), v.begin(), op);
-    assert(std::equal(v.begin(), v.end(), rFirst, rLast));  
+    assert(std::equal(v.begin(), v.end(), rFirst, rLast));
 }
 
 
@@ -99,7 +102,7 @@ int main()
 {
 
     basic_tests();
-    
+
 //  All the iterator categories
 //     test<input_iterator        <const int*> >();
 //     test<forward_iterator      <const int*> >();
@@ -109,4 +112,3 @@ int main()
 //     test<      int*>();
 
 }
- 
