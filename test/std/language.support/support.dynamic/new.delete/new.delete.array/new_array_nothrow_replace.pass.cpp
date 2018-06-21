@@ -21,7 +21,7 @@
 #include "count_new.hpp"
 #include "test_macros.h"
 
-volatile int A_constructed = 0;
+int A_constructed = 0;
 
 struct A
 {
@@ -29,17 +29,17 @@ struct A
     ~A() {--A_constructed;}
 };
 
-A* volatile ap;
-
 int main()
 {
     globalMemCounter.reset();
     assert(globalMemCounter.checkOutstandingNewEq(0));
-    ap = new (std::nothrow) A[3];
+    A *ap = new (std::nothrow) A[3];
+    DoNotOptimize(ap);
     assert(ap);
     assert(A_constructed == 3);
     assert(globalMemCounter.checkOutstandingNewNotEq(0));
     delete [] ap;
+    DoNotOptimize(ap);
     assert(A_constructed == 0);
     assert(globalMemCounter.checkOutstandingNewEq(0));
 }
