@@ -173,6 +173,7 @@ include $(BUILD_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
 LOCAL_MODULE := c++_shared
+LOCAL_STRIP_MODE := none
 LOCAL_WHOLE_STATIC_LIBRARIES := c++_static libc++abi
 LOCAL_EXPORT_C_INCLUDES := $(libcxx_export_includes)
 LOCAL_EXPORT_CPPFLAGS := $(libcxx_export_cxxflags)
