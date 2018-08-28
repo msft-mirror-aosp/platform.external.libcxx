@@ -21,8 +21,7 @@ host_tag = lit_config.params["host_tag"]
 toolchain = lit_config.params["toolchain"]
 triple = lit_config.params["triple"]
 
-config.cxx_under_test = os.path.join(
-    ndk, "toolchains/llvm/prebuilt", host_tag, "bin/clang++")
+config.cxx_under_test = os.path.join(ndk, "toolchain/bin/clang++")
 config.std = "c++14"
 config.libcxx_src_root = libcxx_dir
 config.libcxx_obj_root = libcxx_dir
@@ -39,8 +38,6 @@ config.cxx_abi = "libcxxabi"
 config.use_sanitizer = ""
 config.configuration_variant = "libcxx.ndk"
 config.target_triple = triple
-config.gcc_toolchain = os.path.join(
-    ndk, "toolchains", toolchain + "-4.9", "prebuilt", host_tag)
 
 # Let the main config do the real work.
 config.loaded_site_config = True
