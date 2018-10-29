@@ -21,7 +21,8 @@ host_tag = lit_config.params["host_tag"]
 toolchain = lit_config.params["toolchain"]
 triple = lit_config.params["triple"]
 
-config.cxx_under_test = os.path.join(ndk, "toolchain/bin/clang++")
+config.cxx_under_test = os.path.join(
+    ndk, "toolchains/llvm/prebuilt", host_tag, "bin/clang++")
 config.std = "c++14"
 config.libcxx_src_root = libcxx_dir
 config.libcxx_obj_root = libcxx_dir
