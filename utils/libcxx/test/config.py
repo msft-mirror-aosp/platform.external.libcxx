@@ -312,7 +312,7 @@ class Configuration(object):
             "inferred use_system_cxx_lib as: %r" % self.use_system_cxx_lib)
 
     def configure_availability(self):
-        # See http://llvm.org/docs/AvailabilityMarkup.html
+        # See https://libcxx.llvm.org/docs/DesignDocs/AvailabilityMarkup.html
         self.with_availability = self.get_lit_bool('with_availability', False)
         self.lit_config.note(
             "inferred with_availability as: %r" % self.with_availability)
@@ -585,7 +585,7 @@ class Configuration(object):
             self.cxx.flags += ['-arch', arch]
             self.cxx.flags += ['-m' + name + '-version-min=' + version]
 
-        # Disable availability unless explicitely requested
+        # Disable availability unless explicitly requested
         if not self.with_availability:
             self.cxx.flags += ['-D_LIBCPP_DISABLE_AVAILABILITY']
         # FIXME(EricWF): variant_size.pass.cpp requires a slightly larger
@@ -677,7 +677,8 @@ class Configuration(object):
                 if feature_macros[m]:
                     define += '=%s' % (feature_macros[m])
                 self.cxx.compile_flags += [define]
-            if m == '_LIBCPP_DISABLE_VISIBILITY_ANNOTATIONS':
+            if m == '_LIBCPP_DISABLE_VISIBILITY_ANNOTATIONS' or \
+               m == '_LIBCPP_HIDE_FROM_ABI_PER_TU_BY_DEFAULT':
                 continue
             if m == '_LIBCPP_ABI_VERSION':
                 self.config.available_features.add('libcpp-abi-version-v%s'
@@ -720,13 +721,9 @@ class Configuration(object):
         enable_fs = self.get_lit_bool('enable_filesystem', default=False)
         if not enable_fs:
             return
-        enable_experimental = self.get_lit_bool('enable_experimental', default=False)
-        if not enable_experimental:
-            self.lit_config.fatal(
-                'filesystem is enabled but libc++experimental.a is not.')
         self.config.available_features.add('c++filesystem')
         static_env = os.path.join(self.libcxx_src_root, 'test', 'std',
-                                  'experimental', 'filesystem', 'Inputs', 'static_test_env')
+                                  'input.output', 'filesystems', 'Inputs', 'static_test_env')
         static_env = os.path.realpath(static_env)
         assert os.path.isdir(static_env)
         self.cxx.compile_flags += ['-DLIBCXX_FILESYSTEM_STATIC_TEST_ROOT="%s"' % static_env]
@@ -821,6 +818,10 @@ class Configuration(object):
         if libcxx_experimental:
             self.config.available_features.add('c++experimental')
             self.cxx.link_flags += ['-lc++experimental']
+        libcxx_fs = self.get_lit_bool('enable_filesystem', default=False)
+        if libcxx_fs:
+            self.config.available_features.add('c++fs')
+            self.cxx.link_flags += ['-lc++fs']
         if self.link_shared:
             self.cxx.link_flags += ['-lc++']
         else:
@@ -933,9 +934,6 @@ class Configuration(object):
         # FIXME: Enable the two warnings below.
         self.cxx.addWarningFlagIfSupported('-Wno-conversion')
         self.cxx.addWarningFlagIfSupported('-Wno-unused-local-typedef')
-        # FIXME: Remove this warning once the min/max handling patch lands
-        # See https://reviews.llvm.org/D33080
-        self.cxx.addWarningFlagIfSupported('-Wno-#warnings')
         std = self.get_lit_conf('std', None)
         if std in ['c++98', 'c++03']:
             # The '#define static_assert' provided by libc++ in C++03 mode
