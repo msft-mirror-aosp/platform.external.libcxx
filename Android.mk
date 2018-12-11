@@ -67,7 +67,6 @@ libcxx_cxxflags := \
     -std=c++1z \
     -DLIBCXX_BUILDING_LIBCXXABI \
     -D_LIBCPP_BUILDING_LIBRARY \
-    -D_LIBCPP_DISABLE_NEW_DELETE_DEFINITIONS \
     -D__STDC_FORMAT_MACROS \
     $(libcxx_export_cxxflags) \
 
