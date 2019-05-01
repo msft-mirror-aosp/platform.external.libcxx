@@ -83,6 +83,7 @@ class Configuration(libcxx.test.config.Configuration):
     def configure_features(self):
         self.config.available_features.add(self.get_lit_conf('std'))
         self.config.available_features.add('long_tests')
+        self.config.available_features.add('c++filesystem-disabled')
 
     def get_test_format(self):
         # Note that we require that the caller has cleaned this directory,
