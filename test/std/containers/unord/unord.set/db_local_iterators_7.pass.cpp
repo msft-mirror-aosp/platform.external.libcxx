@@ -1,9 +1,8 @@
 //===----------------------------------------------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
-//
-// This file is dual licensed under the MIT and the University of Illinois Open
-// Source Licenses. See LICENSE.TXT for details.
+// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
+// See https://llvm.org/LICENSE.txt for license information.
+// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 //
 //===----------------------------------------------------------------------===//
 
@@ -23,7 +22,7 @@
 
 #include "min_allocator.h"
 
-int main()
+int main(int, char**)
 {
     {
     typedef int T;
@@ -37,7 +36,7 @@ int main()
 #if TEST_STD_VER >= 11
     {
     typedef int T;
-    typedef std::unordered_set<T, min_allocator<T>> C;
+    typedef std::unordered_set<T, std::hash<T>, std::equal_to<T>, min_allocator<T>> C;
     C c(1);
     C::local_iterator i = c.begin(0);
     ++i;
@@ -50,8 +49,10 @@ int main()
 
 #else
 
-int main()
+int main(int, char**)
 {
+
+  return 0;
 }
 
 #endif

@@ -1,10 +1,9 @@
 // -*- C++ -*-
 //===-------------------------- memory ------------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
-//
-// This file is dual licensed under the MIT and the University of Illinois Open
-// Source Licenses. See LICENSE.TXT for details.
+// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
+// See https://llvm.org/LICENSE.txt for license information.
+// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 //
 //===----------------------------------------------------------------------===//
 
@@ -684,7 +683,7 @@ inline _LIBCPP_INLINE_VISIBILITY
 _ValueType __libcpp_relaxed_load(_ValueType const* __value) {
 #if !defined(_LIBCPP_HAS_NO_THREADS) && \
     defined(__ATOMIC_RELAXED) &&        \
-    (__has_builtin(__atomic_load_n) || _GNUC_VER >= 407)
+    (__has_builtin(__atomic_load_n) || defined(_LIBCPP_COMPILER_GCC))
     return __atomic_load_n(__value, __ATOMIC_RELAXED);
 #else
     return *__value;
@@ -696,7 +695,7 @@ inline _LIBCPP_INLINE_VISIBILITY
 _ValueType __libcpp_acquire_load(_ValueType const* __value) {
 #if !defined(_LIBCPP_HAS_NO_THREADS) && \
     defined(__ATOMIC_ACQUIRE) &&        \
-    (__has_builtin(__atomic_load_n) || _GNUC_VER >= 407)
+    (__has_builtin(__atomic_load_n) || defined(_LIBCPP_COMPILER_GCC))
     return __atomic_load_n(__value, __ATOMIC_ACQUIRE);
 #else
     return *__value;
@@ -1811,10 +1810,10 @@ public:
         if (__n > max_size())
             __throw_length_error("allocator<T>::allocate(size_t n)"
                                  " 'n' exceeds maximum supported size");
-        return static_cast<pointer>(_VSTD::__libcpp_allocate(__n * sizeof(_Tp), __alignof(_Tp)));
+        return static_cast<pointer>(_VSTD::__libcpp_allocate(__n * sizeof(_Tp), _LIBCPP_ALIGNOF(_Tp)));
         }
     _LIBCPP_INLINE_VISIBILITY void deallocate(pointer __p, size_type __n) _NOEXCEPT
-        {_VSTD::__libcpp_deallocate((void*)__p, __n * sizeof(_Tp), __alignof(_Tp));}
+        {_VSTD::__libcpp_deallocate((void*)__p, __n * sizeof(_Tp), _LIBCPP_ALIGNOF(_Tp));}
     _LIBCPP_INLINE_VISIBILITY size_type max_size() const _NOEXCEPT
         {return size_type(~0) / sizeof(_Tp);}
 #if !defined(_LIBCPP_HAS_NO_RVALUE_REFERENCES) && !defined(_LIBCPP_HAS_NO_VARIADICS)
@@ -1912,10 +1911,10 @@ public:
         if (__n > max_size())
             __throw_length_error("allocator<const T>::allocate(size_t n)"
                                  " 'n' exceeds maximum supported size");
-        return static_cast<pointer>(_VSTD::__libcpp_allocate(__n * sizeof(_Tp), __alignof(_Tp)));
+        return static_cast<pointer>(_VSTD::__libcpp_allocate(__n * sizeof(_Tp), _LIBCPP_ALIGNOF(_Tp)));
     }
     _LIBCPP_INLINE_VISIBILITY void deallocate(pointer __p, size_type __n) _NOEXCEPT
-        {_VSTD::__libcpp_deallocate((void*) const_cast<_Tp *>(__p), __n * sizeof(_Tp), __alignof(_Tp));}
+        {_VSTD::__libcpp_deallocate((void*) const_cast<_Tp *>(__p), __n * sizeof(_Tp), _LIBCPP_ALIGNOF(_Tp));}
     _LIBCPP_INLINE_VISIBILITY size_type max_size() const _NOEXCEPT
         {return size_type(~0) / sizeof(_Tp);}
 #if !defined(_LIBCPP_HAS_NO_RVALUE_REFERENCES) && !defined(_LIBCPP_HAS_NO_VARIADICS)
@@ -2031,7 +2030,7 @@ get_temporary_buffer(ptrdiff_t __n) _NOEXCEPT
     while (__n > 0)
     {
 #if !defined(_LIBCPP_HAS_NO_ALIGNED_ALLOCATION)
-    if (__is_overaligned_for_new(__alignof(_Tp)))
+    if (__is_overaligned_for_new(_LIBCPP_ALIGNOF(_Tp)))
         {
             std::align_val_t __al =
                 std::align_val_t(std::alignment_of<_Tp>::value);
@@ -2042,7 +2041,7 @@ get_temporary_buffer(ptrdiff_t __n) _NOEXCEPT
                 __n * sizeof(_Tp), nothrow));
         }
 #else
-    if (__is_overaligned_for_new(__alignof(_Tp)))
+    if (__is_overaligned_for_new(_LIBCPP_ALIGNOF(_Tp)))
         {
             // Since aligned operator new is unavailable, return an empty
             // buffer rather than one with invalid alignment.
@@ -2066,7 +2065,7 @@ template <class _Tp>
 inline _LIBCPP_INLINE_VISIBILITY
 void return_temporary_buffer(_Tp* __p) _NOEXCEPT
 {
-  _VSTD::__libcpp_deallocate_unsized((void*)__p, __alignof(_Tp));
+  _VSTD::__libcpp_deallocate_unsized((void*)__p, _LIBCPP_ALIGNOF(_Tp));
 }
 
 #if _LIBCPP_STD_VER <= 14 || defined(_LIBCPP_ENABLE_CXX17_REMOVED_AUTO_PTR)
@@ -3467,7 +3466,7 @@ uninitialized_move_n(_InputIt __first, _Size __n, _ForwardIt __first_res) {
                        && defined(__ATOMIC_RELAXED)                  \
                        && defined(__ATOMIC_ACQ_REL)
 #   define _LIBCPP_HAS_BUILTIN_ATOMIC_SUPPORT
-#elif !defined(__clang__) && defined(_GNUC_VER) && _GNUC_VER >= 407
+#elif defined(_LIBCPP_COMPILER_GCC)
 #   define _LIBCPP_HAS_BUILTIN_ATOMIC_SUPPORT
 #endif
 
@@ -5642,7 +5641,7 @@ template <class _Tp, class _Alloc>
 struct __temp_value {
     typedef allocator_traits<_Alloc> _Traits;
 
-    typename aligned_storage<sizeof(_Tp), alignof(_Tp)>::type __v;
+    typename aligned_storage<sizeof(_Tp), _LIBCPP_ALIGNOF(_Tp)>::type __v;
     _Alloc &__a;
 
     _Tp *__addr() { return reinterpret_cast<_Tp *>(addressof(__v)); }
