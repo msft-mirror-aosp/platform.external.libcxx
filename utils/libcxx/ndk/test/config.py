@@ -67,6 +67,9 @@ class Configuration(libcxx.test.config.Configuration):
             ])
 
     def configure_link_flags(self):
+        if self.get_lit_conf('linker') == 'lld':
+            self.cxx.link_flags.append('-fuse-ld=lld')
+
         triple = self.get_lit_conf('target_triple')
         if triple.startswith('arm-') or triple.startswith('armv7-'):
             self.cxx.link_flags.append('-Wl,--exclude-libs,libunwind.a')
