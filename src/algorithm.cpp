@@ -10,7 +10,12 @@
 #define _LIBCPP_EXTERN_TEMPLATE(...) extern template __VA_ARGS__;
 #include "algorithm"
 #include "random"
+#ifndef _LIBCPP_HAS_NO_THREADS
 #include "mutex"
+#if defined(__unix__) && !defined(__ANDROID__) && defined(__ELF__) && defined(_LIBCPP_HAS_COMMENT_LIB_PRAGMA)
+#pragma comment(lib, "pthread")
+#endif
+#endif
 
 _LIBCPP_BEGIN_NAMESPACE_STD
 
