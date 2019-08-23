@@ -17,7 +17,7 @@
 #include <cassert>
 #include <limits>
 
-#include "count_new.hpp"
+#include "count_new.h"
 #include "test_macros.h"
 
 int A_constructed = 0;

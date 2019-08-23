@@ -26,6 +26,7 @@ libcxx_sources := \
     charconv.cpp \
     chrono.cpp \
     condition_variable.cpp \
+    condition_variable_destructor.cpp \
     debug.cpp \
     exception.cpp \
     functional.cpp \
@@ -36,6 +37,7 @@ libcxx_sources := \
     locale.cpp \
     memory.cpp \
     mutex.cpp \
+    mutex_destructor.cpp \
     new.cpp \
     optional.cpp \
     random.cpp \
