@@ -206,7 +206,7 @@ endif
 include $(BUILD_SHARED_LIBRARY)
 
 $(call import-add-path, $(LOCAL_PATH)/../..)
-$(call import-module, external/libcxxabi)
+$(call import-module, toolchain/llvm-project/libcxxabi)
 
 endif # LIBCXX_FORCE_REBUILD == true
 
