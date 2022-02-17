@@ -14,6 +14,10 @@
 // limitations under the License.
 //
 
+// NOTE: This project is out of date. See http://b/175635923 for details. Until
+// that is resolved it is not possible for us to update or expand access to
+// std::filesystem.
+
 package {
     default_applicable_licenses: ["external_libcxx_license"],
 }
@@ -160,16 +164,9 @@ cc_library_shared {
     whole_static_libs: ["libc++_static"],
     stl: "none",
 
-    pgo: {
-        sampling: true,
-    },
+    afdo: true,
 
     target: {
-        android: {
-            pgo: {
-                profile_file: "libc++/libc++.profdata",
-            },
-        },
         darwin: {
             unexported_symbols_list: "lib/libc++unexp.exp",
             force_symbols_not_weak_list: "lib/notweak.exp",
@@ -195,10 +192,18 @@ cc_library_static {
 
 // Not available to vendor modules until libc++ is updated and this library is
 // merged into libc++ proper.
-// https://issuetracker.google.com/147469372
+// Follow http://b/175635923 for progress.
 cc_library_static {
     name: "libc++fs",
+    ramdisk_available: true,
     recovery_available: true,
+    apex_available: [
+        "//apex_available:platform",
+        "com.android.art",
+        "com.android.art.debug",
+    ],
+    // being part of updatable apexes, this should work on older releases
+    min_sdk_version: "apex_inherit",
     defaults: ["libc++ defaults"],
     srcs: [
         "src/filesystem/directory_iterator.cpp",
