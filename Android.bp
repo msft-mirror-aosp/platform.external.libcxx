@@ -296,7 +296,6 @@ genrule {
     visibility: ["//external/musl"],
     srcs: [
         "LICENSE.TXT",
-        "NOTICE",
         "include/**/*",
         ":libcxxabi_headers",
     ],
@@ -305,10 +304,10 @@ genrule {
         "soong_zip",
         "zip2zip",
     ],
-    cmd: "LIBCXX_DIR=$$(dirname $(location NOTICE)) && " +
+    cmd: "LIBCXX_DIR=$$(dirname $(location LICENSE.TXT)) && " +
         "$(location soong_zip) -o $(genDir)/sysroot.zip -symlinks=false" +
-        // NOTICE
-        " -j -f $(location NOTICE) " +
+        // LICENSE.TXT
+        " -j -f $(location LICENSE.TXT) " +
         // headers
         " -P include/c++ " +
         "  -C $${LIBCXX_DIR}/include " +
@@ -318,5 +317,5 @@ genrule {
         " -x include/c++/CMakeLists.txt" +
         " -x include/c++/module.modulemap " +
         " include/**/*:include " +
-        " NOTICE:NOTICE.libc++",
+        " LICENSE.TXT:LICENSE.libc++",
 }
