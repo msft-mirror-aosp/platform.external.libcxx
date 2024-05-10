@@ -152,10 +152,7 @@ cc_library_shared {
     vendor_available: true,
     product_available: true,
     native_bridge_supported: true,
-    vndk: {
-        enabled: true,
-        support_system_process: true,
-    },
+    double_loadable: true,
     ramdisk_available: true,
     vendor_ramdisk_available: true,
     recovery_available: true,
@@ -190,10 +187,6 @@ cc_library_shared {
         linux_bionic: {
             enabled: true,
         },
-    },
-
-    header_abi_checker: {
-        diff_flags: ["-allow-adding-removing-weak-symbols"],
     },
 }
 
@@ -251,7 +244,6 @@ cc_binary {
     cppflags: [
         "-fsized-deallocation",
         "-fexceptions",
-        "-fcoroutines-ts",
         "-Wno-format-zero-length",
         "-Wno-implicit-fallthrough",
         "-Wno-non-virtual-dtor",
@@ -299,18 +291,19 @@ genrule {
     name: "libc_musl_sysroot_libc++_headers",
     visibility: ["//external/musl"],
     srcs: [
-        "NOTICE",
+        "LICENSE.TXT",
         "include/**/*",
+        ":libcxxabi_headers",
     ],
     out: ["libc_musl_sysroot_libc++_headers.zip"],
     tools: [
         "soong_zip",
         "zip2zip",
     ],
-    cmd: "LIBCXX_DIR=$$(dirname $(location NOTICE)) && " +
+    cmd: "LIBCXX_DIR=$$(dirname $(location LICENSE.TXT)) && " +
         "$(location soong_zip) -o $(genDir)/sysroot.zip -symlinks=false" +
-        // NOTICE
-        " -j -f $(location NOTICE) " +
+        // LICENSE.TXT
+        " -j -f $(location LICENSE.TXT) " +
         // headers
         " -P include/c++ " +
         "  -C $${LIBCXX_DIR}/include " +
@@ -320,5 +313,5 @@ genrule {
         " -x include/c++/CMakeLists.txt" +
         " -x include/c++/module.modulemap " +
         " include/**/*:include " +
-        " NOTICE:NOTICE.libc++",
+        " LICENSE.TXT:LICENSE.libc++",
 }
